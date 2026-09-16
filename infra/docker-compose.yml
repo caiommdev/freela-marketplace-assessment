@@ -133,6 +133,125 @@ services:
         kafka-2:19092
     networks: [freela-net]
 
+  eureka-server:
+    build:
+      context: ..
+      dockerfile: eureka-server/Dockerfile
+    container_name: freela-eureka-server
+    ports:
+      - "8761:8761"
+    networks: [freela-net]
+
+  api-gateway:
+    build:
+      context: ..
+      dockerfile: api-gateway/Dockerfile
+    container_name: freela-api-gateway
+    depends_on:
+      eureka-server:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+    networks: [freela-net]
+
+  contrato-service:
+    build:
+      context: ..
+      dockerfile: contrato-service/Dockerfile
+    container_name: freela-contrato-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    ports:
+      - "8081:8081"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/contrato_db
+      DB_USER: freela
+      DB_PASSWORD: freela
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-1:19092,kafka-2:19092
+    networks: [freela-net]
+
+  notificacao-service:
+    build:
+      context: ..
+      dockerfile: notificacao-service/Dockerfile
+    container_name: freela-notificacao-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    ports:
+      - "8082:8082"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/notificacao_db
+      DB_USER: freela
+      DB_PASSWORD: freela
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:19092,kafka-2:19092
+    networks: [freela-net]
+
+  reputacao-service:
+    build:
+      context: ..
+      dockerfile: reputacao-service/Dockerfile
+    container_name: freela-reputacao-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    ports:
+      - "8083:8083"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/reputacao_db
+      DB_USER: freela
+      DB_PASSWORD: freela
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:19092,kafka-2:19092
+    networks: [freela-net]
+
+  auditoria-service:
+    build:
+      context: ..
+      dockerfile: auditoria-service/Dockerfile
+    container_name: freela-auditoria-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-1:
+        condition: service_healthy
+      kafka-2:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    ports:
+      - "8084:8084"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/auditoria_db
+      DB_USER: freela
+      DB_PASSWORD: freela
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:19092,kafka-2:19092
+    networks: [freela-net]
+
 volumes:
   postgres_data:
 
