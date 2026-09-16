@@ -29,5 +29,7 @@ public record ContratoCriado
                 contrato.valor()
         );
     }
-    @Override public String eventType() { return "ContratoCriado"; }
+    @Override public  String eventType() {
+        return "ContratoCriado";
+    }
 }

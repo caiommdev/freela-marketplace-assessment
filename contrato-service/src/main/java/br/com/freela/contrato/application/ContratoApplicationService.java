@@ -3,6 +3,7 @@ package br.com.freela.contrato.application;
 import br.com.freela.contrato.domain.model.Contrato;
 import br.com.freela.contrato.domain.repository.ContratoRepository;
 import br.com.freela.contrato.domain.shared.DomainEvent;
+import br.com.freela.contrato.domain.shared.DomainEventPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,12 @@ import java.util.UUID;
 public class ContratoApplicationService {
     private static final Logger log = LoggerFactory.getLogger(ContratoApplicationService.class);
     private final ContratoRepository repository;
+    private final DomainEventPublisher eventPublisher;
 
-    public ContratoApplicationService(ContratoRepository repository) { this.repository = repository; }
+    public ContratoApplicationService(ContratoRepository repository, DomainEventPublisher eventPublisher) {
+        this.repository = repository;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Transactional
     public Contrato criar(CriarContratoCommand cmd) {
@@ -27,12 +32,10 @@ public class ContratoApplicationService {
                 contrato.id(), contrato.status(), contrato.domainEvents().size());
         Contrato salvo = repository.salvar(contrato);
 
-        // PONTO DO ASSESSMENT:
-        // Os eventos existem no Aggregate, mas ainda NÃO são publicados no Kafka.
-        // O aluno deverá implementar a estratégia de publicação/mensagens transacionais.
         for (DomainEvent event : contrato.pullDomainEvents()) {
             log.info("contrato.evento.pendente contratoId={} eventId={} eventType={} occurredAt={}",
                     contrato.id(), event.eventId(), event.eventType(), event.occurredAt());
+            eventPublisher.publish(event);
         }
 
         log.info("contrato.criacao.sucesso contratoId={} clienteId={} freelancerId={} status={}",

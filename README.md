@@ -108,7 +108,7 @@ contrato-service
         └── web
 ```
 
-O Aggregate `Contrato` concentra as regras relacionadas às mudanças de estado e produz eventos de domínio. Atualmente existe o evento `ContratoCriado`, que contém as principais informações do contrato no momento da criação.
+O Aggregate `Contrato` concentra as regras relacionadas às mudanças de estado e produz eventos de domínio. Atualmente existe o evento `ContratoCriadoKafkaEvent`, que contém as principais informações do contrato no momento da criação.
 
 ## Serviços
 
