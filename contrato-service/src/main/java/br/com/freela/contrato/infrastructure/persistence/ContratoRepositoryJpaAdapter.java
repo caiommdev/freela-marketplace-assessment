@@ -19,6 +19,7 @@ public class ContratoRepositoryJpaAdapter implements ContratoRepository {
         log.info("contrato.persistence.save.inicio contratoId={} status={}", c.id(), c.status());
         var entity = new ContratoJpaEntity(c.id(), c.clienteId(), c.freelancerId(), c.titulo(), c.valor(), c.status(), c.criadoEm());
         var saved = jpa.save(entity);
+
         log.info("contrato.persistence.save.sucesso contratoId={} status={}", saved.getId(), saved.getStatus());
         return toDomain(saved);
     }
