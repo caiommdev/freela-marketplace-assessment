@@ -37,4 +37,25 @@ public class ContratoController {
         log.info("http.contrato.listar correlationId={}", correlationId);
         return service.listar().stream().map(ContratoResponse::from).toList();
     }
+
+    @PostMapping("/{id}/entrega")
+    public ContratoResponse registrarEntrega(@RequestHeader(value="X-Correlation-Id", required=false) String correlationId,
+                                             @PathVariable UUID id) {
+        log.info("http.contrato.entrega correlationId={} contratoId={}", correlationId, id);
+        return ContratoResponse.from(service.registrarEntrega(id));
+    }
+
+    @PostMapping("/{id}/concluir")
+    public ContratoResponse concluir(@RequestHeader(value="X-Correlation-Id", required=false) String correlationId,
+                                     @PathVariable UUID id) {
+        log.info("http.contrato.concluir correlationId={} contratoId={}", correlationId, id);
+        return ContratoResponse.from(service.concluir(id));
+    }
+
+    @PostMapping("/{id}/cancelar")
+    public ContratoResponse cancelar(@RequestHeader(value="X-Correlation-Id", required=false) String correlationId,
+                                     @PathVariable UUID id) {
+        log.info("http.contrato.cancelar correlationId={} contratoId={}", correlationId, id);
+        return ContratoResponse.from(service.cancelar(id));
+    }
 }

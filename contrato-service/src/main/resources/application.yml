@@ -34,6 +34,9 @@ spring:
 
     topics:
       freela-marketplace.contrato.criado: freela-marketplace.contrato.criado
+      freela-marketplace.contrato.entrega-registrada: freela-marketplace.contrato.entrega-registrada
+      freela-marketplace.contrato.concluido: freela-marketplace.contrato.concluido
+      freela-marketplace.contrato.cancelado: freela-marketplace.contrato.cancelado
 
 management:
   endpoints:

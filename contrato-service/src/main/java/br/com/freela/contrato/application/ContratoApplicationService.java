@@ -32,15 +32,63 @@ public class ContratoApplicationService {
                 contrato.id(), contrato.status(), contrato.domainEvents().size());
         Contrato salvo = repository.salvar(contrato);
 
+        publicarEventos(contrato);
+
+        log.info("contrato.criacao.sucesso contratoId={} clienteId={} freelancerId={} status={}",
+                salvo.id(), salvo.clienteId(), salvo.freelancerId(), salvo.status());
+        return salvo;
+    }
+
+    @Transactional
+    public Contrato registrarEntrega(UUID id) {
+        log.info("contrato.entrega.inicio contratoId={}", id);
+        Contrato contrato = carregar(id);
+        contrato.registrarEntrega();
+        Contrato salvo = repository.salvar(contrato);
+
+        publicarEventos(contrato);
+
+        log.info("contrato.entrega.sucesso contratoId={} status={}", salvo.id(), salvo.status());
+        return salvo;
+    }
+
+    @Transactional
+    public Contrato concluir(UUID id) {
+        log.info("contrato.conclusao.inicio contratoId={}", id);
+        Contrato contrato = carregar(id);
+        contrato.concluir();
+        Contrato salvo = repository.salvar(contrato);
+
+        publicarEventos(contrato);
+
+        log.info("contrato.conclusao.sucesso contratoId={} status={}", salvo.id(), salvo.status());
+        return salvo;
+    }
+
+    @Transactional
+    public Contrato cancelar(UUID id) {
+        log.info("contrato.cancelamento.inicio contratoId={}", id);
+        Contrato contrato = carregar(id);
+        contrato.cancelar();
+        Contrato salvo = repository.salvar(contrato);
+
+        publicarEventos(contrato);
+
+        log.info("contrato.cancelamento.sucesso contratoId={} status={}", salvo.id(), salvo.status());
+        return salvo;
+    }
+
+    private Contrato carregar(UUID id) {
+        return repository.buscarPorId(id)
+                .orElseThrow(() -> new IllegalArgumentException("Contrato não encontrado: " + id));
+    }
+
+    private void publicarEventos(Contrato contrato) {
         for (DomainEvent event : contrato.pullDomainEvents()) {
             log.info("contrato.evento.pendente contratoId={} eventId={} eventType={} occurredAt={}",
                     contrato.id(), event.eventId(), event.eventType(), event.occurredAt());
             eventPublisher.publish(event);
         }
-
-        log.info("contrato.criacao.sucesso contratoId={} clienteId={} freelancerId={} status={}",
-                salvo.id(), salvo.clienteId(), salvo.freelancerId(), salvo.status());
-        return salvo;
     }
 
     @Transactional(readOnly = true)
