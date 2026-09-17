@@ -18,7 +18,7 @@ public class ContratoCriadoMapper
         return new ContratoCriadoKafkaEvent(
                 domainEvent.eventId().toString(),
                 domainEvent.occurredAt().toString(),
-                domainEvent.contratoId().toString(),
+                domainEvent.contratoId(),
                 domainEvent.clienteId().toString(),
                 domainEvent.freelancerId().toString(),
                 domainEvent.titulo(),

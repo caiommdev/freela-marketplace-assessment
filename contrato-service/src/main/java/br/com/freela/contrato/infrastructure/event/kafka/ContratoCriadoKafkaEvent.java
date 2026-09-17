@@ -1,9 +1,11 @@
 package br.com.freela.contrato.infrastructure.event.kafka;
 
+import java.util.UUID;
+
 public record ContratoCriadoKafkaEvent(
     String eventId,
     String occurredAt,
-    String contratoId,
+    UUID contratoId,
     String clienteId,
     String freelancerId,
     String titulo,
@@ -11,7 +13,7 @@ public record ContratoCriadoKafkaEvent(
 ) implements KafkaEvent {
 
     @Override
-    public String contractId() {
+    public UUID contractId() {
         return contratoId;
     }
 }

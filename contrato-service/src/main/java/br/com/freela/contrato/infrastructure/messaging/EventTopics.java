@@ -1,17 +1,16 @@
 package br.com.freela.contrato.infrastructure.messaging;
 
 import br.com.freela.contrato.domain.event.ContratoCriado;
-import br.com.freela.contrato.domain.model.Contrato;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
-public class KafkaEventTopics {
+public class EventTopics {
     private final Map<Class<?>, String> topicsByEventType;
 
-    public KafkaEventTopics(
+    public EventTopics(
             @Value("${spring.kafka.topics.freela-marketplace.contrato.criado}") String contratoCriadoTopic
     ) {
         this.topicsByEventType = Map.of(
