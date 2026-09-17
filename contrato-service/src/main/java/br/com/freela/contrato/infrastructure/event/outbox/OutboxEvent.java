@@ -2,6 +2,8 @@ package br.com.freela.contrato.infrastructure.event.outbox;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -13,8 +15,8 @@ public class OutboxEvent {
     @Id
     private UUID id;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false, insertable = false)
+    @Generated(event = EventType.INSERT)
+    @Column(name = "seq", columnDefinition = "bigserial", insertable = false, updatable = false)
     private Long seq;
 
     @Column(nullable = false)
