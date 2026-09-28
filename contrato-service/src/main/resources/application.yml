@@ -38,6 +38,10 @@ spring:
       freela-marketplace.contrato.concluido: freela-marketplace.contrato.concluido
       freela-marketplace.contrato.cancelado: freela-marketplace.contrato.cancelado
 
+    template:
+      observation-enabled: false
+    listener:
+      observation-enabled: true
 management:
   endpoints:
     web:
@@ -48,15 +52,16 @@ management:
     health:
       show-details: always
 
+  tracing:
+    sampling:
+      probability: 1.0
+    export:
+      zipkin:
+        endpoint: http://zipkin:9411/api/v2/spans
+
 eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
 
-logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level service=${spring.application.name} thread=%thread logger=%logger{36} - %msg%n"
-  level:
-    root: INFO
-    br.com.freela: INFO
-    org.hibernate.SQL: INFO
+

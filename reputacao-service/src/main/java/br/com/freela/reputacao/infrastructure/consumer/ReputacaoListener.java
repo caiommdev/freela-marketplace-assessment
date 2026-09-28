@@ -35,8 +35,8 @@ public class ReputacaoListener {
 
         MDC.put("correlationId", correlationId);
         try {
-            log.info("reputacao.evento.recebido eventId={} eventType={} contratoId={}",
-                    eventId, eventType, contratoId);
+            log.info("reputacao.evento.recebido eventId={} eventType={} contratoId={} startedAt={}",
+                    eventId, eventType, contratoId, System.currentTimeMillis());
 
             var dados = objectMapper.readValue(payload, ContratoConcluidoPayload.class);
             service.registrarContratoConcluido(

@@ -28,15 +28,15 @@ public class ReputacaoService {
             log.info("reputacao.evento.duplicado.ignorado eventId={} contratoId={}", eventId, contratoId);
             return;
         }
-        log.info("reputacao.atualizacao.inicio eventId={} contratoId={} freelancerId={} valor={}",
-                eventId, contratoId, freelancerId, valor);
+        log.info("reputacao.atualizacao.inicio eventId={} contratoId={} freelancerId={} valor={} startedAt={}",
+                eventId, contratoId, freelancerId, valor, System.currentTimeMillis());
 
         var reputacao = repository.findById(freelancerId).orElseGet(() -> new ReputacaoFreelancer(freelancerId));
         reputacao.registrarContrato(valor);
         repository.save(reputacao);
         processedRepository.save(new ProcessedEvent(eventId));
 
-        log.info("reputacao.atualizacao.sucesso eventId={} contratoId={} freelancerId={} contratosConcluidos={} valorTotal={}",
-                eventId, contratoId, freelancerId, reputacao.contratosConcluidos, reputacao.valorTotal);
+        log.info("reputacao.atualizacao.sucesso eventId={} contratoId={} freelancerId={} contratosConcluidos={} valorTotal={} endedAt={}",
+                eventId, contratoId, freelancerId, reputacao.contratosConcluidos, reputacao.valorTotal, System.currentTimeMillis());
     }
 }

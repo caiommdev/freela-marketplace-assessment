@@ -34,6 +34,9 @@ public class OutboxEvent {
     @Column(nullable = false)
     private String correlationId;
 
+    @Column(columnDefinition = "text")
+    private String traceContext;
+
     @Column(nullable = false)
     private Instant createdAt;
 
@@ -42,13 +45,14 @@ public class OutboxEvent {
     protected OutboxEvent() {}
 
     public OutboxEvent(UUID id, UUID aggregateId, String eventType,
-                       String topic, String payload, String correlationId) {
+                       String topic, String payload, String correlationId, String traceContext) {
         this.id = id;
         this.aggregateId = aggregateId;
         this.eventType = eventType;
         this.topic = topic;
         this.payload = payload;
         this.correlationId = correlationId;
+        this.traceContext = traceContext;
         this.createdAt = Instant.now();
     }
 

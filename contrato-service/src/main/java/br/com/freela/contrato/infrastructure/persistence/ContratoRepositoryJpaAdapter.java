@@ -16,11 +16,11 @@ public class ContratoRepositoryJpaAdapter implements ContratoRepository {
     public ContratoRepositoryJpaAdapter(SpringDataContratoRepository jpa) { this.jpa = jpa; }
 
     @Override public Contrato salvar(Contrato c) {
-        log.info("contrato.persistence.save.inicio contratoId={} status={}", c.id(), c.status());
+        log.info("contrato.persistence.save.inicio contratoId={} status={} startedAt={}", c.id(), c.status(), System.currentTimeMillis());
         var entity = new ContratoJpaEntity(c.id(), c.clienteId(), c.freelancerId(), c.titulo(), c.valor(), c.status(), c.criadoEm());
         var saved = jpa.save(entity);
 
-        log.info("contrato.persistence.save.sucesso contratoId={} status={}", saved.getId(), saved.getStatus());
+        log.info("contrato.persistence.save.sucesso contratoId={} status={} endedAt={}", saved.getId(), saved.getStatus(), System.currentTimeMillis());
         return toDomain(saved);
     }
     @Override public Optional<Contrato> buscarPorId(UUID id) {

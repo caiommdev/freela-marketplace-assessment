@@ -23,14 +23,15 @@ public class RequestLoggingFilter implements GlobalFilter, Ordered {
         long inicio = System.currentTimeMillis();
 
         var request = exchange.getRequest().mutate().header("X-Correlation-Id", correlationId).build();
-        log.info("gateway.request.inicio correlationId={} method={} path={}", correlationId,
-                request.getMethod(), request.getURI().getPath());
+        log.info("gateway.request.inicio correlationId={} method={} path={} startedAt={}", correlationId,
+                request.getMethod(), request.getURI().getPath(), inicio);
 
         return chain.filter(exchange.mutate().request(request).build())
                 .doFinally(signal -> log.info(
-                        "gateway.request.fim correlationId={} method={} path={} status={} durationMs={} signal={}",
+                        "gateway.request.fim correlationId={} method={} path={} status={} durationMs={} endedAt={} signal={}",
                         finalCorrelationId, request.getMethod(), request.getURI().getPath(),
-                        exchange.getResponse().getStatusCode(), System.currentTimeMillis() - inicio, signal));
+                        exchange.getResponse().getStatusCode(), System.currentTimeMillis() - inicio,
+                        System.currentTimeMillis(), signal));
     }
 
     @Override public int getOrder() { return -100; }

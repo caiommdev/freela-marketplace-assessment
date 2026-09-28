@@ -35,8 +35,8 @@ public class AuditoriaListener {
 
         MDC.put("correlationId", correlationId);
         try {
-            log.info("auditoria.evento.recebido eventId={} eventType={} contratoId={} topic={}",
-                    eventId, eventType, contratoId, topic);
+            log.info("auditoria.evento.recebido eventId={} eventType={} contratoId={} topic={} startedAt={}",
+                    eventId, eventType, contratoId, topic, System.currentTimeMillis());
             service.registrar(UUID.fromString(eventId), UUID.fromString(contratoId),
                     eventType, correlationId, payload);
         } finally {

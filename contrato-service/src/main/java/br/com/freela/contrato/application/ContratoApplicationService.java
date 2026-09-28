@@ -25,8 +25,8 @@ public class ContratoApplicationService {
 
     @Transactional
     public Contrato criar(CriarContratoCommand cmd) {
-        log.info("contrato.criacao.inicio clienteId={} freelancerId={} titulo={} valor={}",
-                cmd.clienteId(), cmd.freelancerId(), cmd.titulo(), cmd.valor());
+        log.info("contrato.criacao.inicio clienteId={} freelancerId={} titulo={} valor={} startedAt={}",
+                cmd.clienteId(), cmd.freelancerId(), cmd.titulo(), cmd.valor(), System.currentTimeMillis());
         Contrato contrato = Contrato.criar(cmd.clienteId(), cmd.freelancerId(), cmd.titulo(), cmd.valor());
         log.info("contrato.dominio.criado contratoId={} status={} domainEvents={}",
                 contrato.id(), contrato.status(), contrato.domainEvents().size());
@@ -34,47 +34,47 @@ public class ContratoApplicationService {
 
         publicarEventos(contrato);
 
-        log.info("contrato.criacao.sucesso contratoId={} clienteId={} freelancerId={} status={}",
-                salvo.id(), salvo.clienteId(), salvo.freelancerId(), salvo.status());
+        log.info("contrato.criacao.sucesso contratoId={} clienteId={} freelancerId={} status={} endedAt={}",
+                salvo.id(), salvo.clienteId(), salvo.freelancerId(), salvo.status(), System.currentTimeMillis());
         return salvo;
     }
 
     @Transactional
     public Contrato registrarEntrega(UUID id) {
-        log.info("contrato.entrega.inicio contratoId={}", id);
+        log.info("contrato.entrega.inicio contratoId={} startedAt={}", id, System.currentTimeMillis());
         Contrato contrato = carregar(id);
         contrato.registrarEntrega();
         Contrato salvo = repository.salvar(contrato);
 
         publicarEventos(contrato);
 
-        log.info("contrato.entrega.sucesso contratoId={} status={}", salvo.id(), salvo.status());
+        log.info("contrato.entrega.sucesso contratoId={} status={} endedAt={}", salvo.id(), salvo.status(), System.currentTimeMillis());
         return salvo;
     }
 
     @Transactional
     public Contrato concluir(UUID id) {
-        log.info("contrato.conclusao.inicio contratoId={}", id);
+        log.info("contrato.conclusao.inicio contratoId={} startedAt={}", id, System.currentTimeMillis());
         Contrato contrato = carregar(id);
         contrato.concluir();
         Contrato salvo = repository.salvar(contrato);
 
         publicarEventos(contrato);
 
-        log.info("contrato.conclusao.sucesso contratoId={} status={}", salvo.id(), salvo.status());
+        log.info("contrato.conclusao.sucesso contratoId={} status={} endedAt={}", salvo.id(), salvo.status(), System.currentTimeMillis());
         return salvo;
     }
 
     @Transactional
     public Contrato cancelar(UUID id) {
-        log.info("contrato.cancelamento.inicio contratoId={}", id);
+        log.info("contrato.cancelamento.inicio contratoId={} startedAt={}", id, System.currentTimeMillis());
         Contrato contrato = carregar(id);
         contrato.cancelar();
         Contrato salvo = repository.salvar(contrato);
 
         publicarEventos(contrato);
 
-        log.info("contrato.cancelamento.sucesso contratoId={} status={}", salvo.id(), salvo.status());
+        log.info("contrato.cancelamento.sucesso contratoId={} status={} endedAt={}", salvo.id(), salvo.status(), System.currentTimeMillis());
         return salvo;
     }
 
@@ -93,17 +93,17 @@ public class ContratoApplicationService {
 
     @Transactional(readOnly = true)
     public Contrato buscar(UUID id) {
-        log.info("contrato.busca.inicio contratoId={}", id);
+        log.info("contrato.busca.inicio contratoId={} startedAt={}", id, System.currentTimeMillis());
         var contrato = repository.buscarPorId(id).orElseThrow(() -> new IllegalArgumentException("Contrato não encontrado: " + id));
-        log.info("contrato.busca.sucesso contratoId={} status={}", id, contrato.status());
+        log.info("contrato.busca.sucesso contratoId={} status={} endedAt={}", id, contrato.status(), System.currentTimeMillis());
         return contrato;
     }
 
     @Transactional(readOnly = true)
     public List<Contrato> listar() {
-        log.info("contrato.listagem.inicio");
+        log.info("contrato.listagem.inicio startedAt={}", System.currentTimeMillis());
         var contratos = repository.listar();
-        log.info("contrato.listagem.sucesso quantidade={}", contratos.size());
+        log.info("contrato.listagem.sucesso quantidade={} endedAt={}", contratos.size(), System.currentTimeMillis());
         return contratos;
     }
 }

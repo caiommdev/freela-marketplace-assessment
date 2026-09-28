@@ -22,11 +22,11 @@ public class AuditoriaService {
             log.info("auditoria.evento.duplicado.ignorado eventId={}", eventId);
             return;
         }
-        log.info("auditoria.registro.inicio eventId={} aggregateId={} eventType={} correlationId={}",
-                eventId, aggregateId, eventType, correlationId);
+        log.info("auditoria.registro.inicio eventId={} aggregateId={} eventType={} correlationId={} startedAt={}",
+                eventId, aggregateId, eventType, correlationId, System.currentTimeMillis());
         var evento = repository.save(new EventoAuditoria(eventId, aggregateId, eventType, correlationId, payload));
 
-        log.info("auditoria.registro.sucesso auditoriaId={} eventId={} aggregateId={} eventType={}",
-                evento.id, eventId, aggregateId, eventType);
+        log.info("auditoria.registro.sucesso auditoriaId={} eventId={} aggregateId={} eventType={} endedAt={}",
+                evento.id, eventId, aggregateId, eventType, System.currentTimeMillis());
     }
 }

@@ -29,8 +29,8 @@ public class NotificacaoService {
             return;
         }
 
-        log.info("notificacao.registro.inicio eventId={} contratoId={} destinatarioId={} tipo={}",
-                eventId, contratoId, destinatarioId, tipo);
+        log.info("notificacao.registro.inicio eventId={} contratoId={} destinatarioId={} tipo={} startedAt={}",
+                eventId, contratoId, destinatarioId, tipo, System.currentTimeMillis());
 
         var notificacao = repository.save(new Notificacao(contratoId, destinatarioId, tipo, mensagem));
         processedRepository.save(new ProcessedEvent(eventId));
@@ -43,7 +43,7 @@ public class NotificacaoService {
                 + "===============================================================",
                 tipo, contratoId, destinatarioId, mensagem);
 
-        log.info("notificacao.registro.sucesso notificacaoId={} eventId={} contratoId={} destinatarioId={}",
-                notificacao.id, eventId, contratoId, destinatarioId);
+        log.info("notificacao.registro.sucesso notificacaoId={} eventId={} contratoId={} destinatarioId={} endedAt={}",
+                notificacao.id, eventId, contratoId, destinatarioId, System.currentTimeMillis());
     }
 }

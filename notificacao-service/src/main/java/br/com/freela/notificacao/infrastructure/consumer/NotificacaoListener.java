@@ -39,8 +39,8 @@ public class NotificacaoListener {
 
         MDC.put("correlationId", correlationId);
         try {
-            log.info("notificacao.evento.recebido eventId={} eventType={} contratoId={}",
-                    eventId, eventType, contratoId);
+            log.info("notificacao.evento.recebido eventId={} eventType={} contratoId={} startedAt={}",
+                    eventId, eventType, contratoId, System.currentTimeMillis());
 
             var dados = objectMapper.readValue(payload, ContratoEventPayload.class);
             UUID id = UUID.fromString(eventId);
