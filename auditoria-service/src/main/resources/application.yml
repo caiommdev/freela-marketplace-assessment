@@ -25,6 +25,7 @@ spring:
       observation-enabled: true
     listener:
       observation-enabled: true
+      concurrency: 3
 management:
   endpoints:
     web:

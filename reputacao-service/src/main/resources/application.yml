@@ -23,6 +23,7 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     listener:
       observation-enabled: true
+      concurrency: 3
 management:
   endpoints:
     web:
